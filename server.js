@@ -4,6 +4,7 @@ const connectDB = require("./database/mongoDB");
 const authRoutes = require("./routes/auth-route");
 const userRoutes = require("./routes/user-routes/user-route");
 const adminUserRoutes = require("./routes/admin-routes/user-route");
+const imageRoutes = require("./routes/user-routes/image-route");
 
 // Initialization
 const app = express();
@@ -16,6 +17,7 @@ app.use(express.json());
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/image", imageRoutes);
 app.use("/api/admin/users", adminUserRoutes);
 
 const PORT = process.env.PORT || 5000;

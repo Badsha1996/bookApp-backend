@@ -17,7 +17,7 @@ const uplaodImage = async (req, res) => {
     const uploadedImage = await Image.create({
       url,
       publicId,
-      uploadedBy: req.userInfo.userId,
+      uploadedBy: req.userInfo.userId
     });
 
     res.status(200).json({
