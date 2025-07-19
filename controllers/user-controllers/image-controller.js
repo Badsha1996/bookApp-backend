@@ -1,6 +1,6 @@
 const Image = require("../../models/Image");
 const { uploadToCloudinary } = require("../../utils/cloudinaryUtil");
-
+const fs = require("fs")
 const uplaodImage = async (req, res) => {
   try {
     // IF User do not have any files
@@ -19,6 +19,9 @@ const uplaodImage = async (req, res) => {
       publicId,
       uploadedBy: req.userInfo.userId
     });
+
+    fs.unlinkSync(req.file.path)
+    
 
     res.status(200).json({
       success: true,
