@@ -1,5 +1,6 @@
 const {
   uplaodImage,
+  fethAllImages,
 } = require("../../controllers/user-controllers/image-controller");
 const authMiddleware = require("../../middlewares/auth-middleware");
 const express = require("express");
@@ -13,5 +14,10 @@ router.post(
   uploadMiddleware.single("image"),
   uplaodImage
 );
+
+router.get(
+  "/fetch",
+  fethAllImages
+)
 
 module.exports = router;
