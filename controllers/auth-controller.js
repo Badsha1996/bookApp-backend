@@ -130,4 +130,57 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, login };
+const changePassword = async (req, res) => {
+  try {
+    // whos password are we changing
+    const userId = req.userInfo.userId;
+    const { newPassword, oldPassword } = req.body;
+
+    // if user did not give naything
+    if (!newPassword || !oldPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "newpassword and oldpassword are required",
+      });
+    }
+
+    // If user type same password twise
+    if (newPassword === oldPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "newpassword and oldpassword can not be same",
+      });
+    }
+
+    // Now i want the actual user data of that ID 😸
+    const user = await User.findById(userId);
+
+    // if user did not type oldpassword correct
+    const isCorrectPassowrd = await bcrypt.compare(oldPassword, user.password);
+    if (!isCorrectPassowrd) {
+      res.status(400).json({
+        success: false,
+        message: `You have entered the wrong password`,
+      });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const newHashedPassword = await bcrypt.hash(newPassword, salt);
+
+    // save the new password
+    user.password = newHashedPassword;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: `Password has been changed`,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong. Please try again",
+    });
+  }
+};
+
+module.exports = { register, login, changePassword };
